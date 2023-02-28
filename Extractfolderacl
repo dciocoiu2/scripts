@@ -1,0 +1,55 @@
+Maximum Path Length Limitation - Win32 apps
+
+	
+Maximum Path Length Limitation - Win32 apps
+Maximum path length limitation.
+
+
+
+
+i have tested on my side, and initially, the script failed for the last folder where the path exceeded 260 characters. after modifying the registry as in the article the script succeeded. 
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem]
+"LongPathsEnabled"=dword:00000001
+
+
+Inline image
+
+the function...
+
+function Extract-FolderACL {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$FolderPath,
+
+        [Parameter(Mandatory = $true)]
+        [string]$OutputFile
+    )
+
+    # Recursively get all files and folders in the specified folder
+    $items = Get-ChildItem $FolderPath -Recurse
+
+    Set-Content -Path $OutputFile -Value '"Path","Owner","Access"' -Encoding Unicode;
+
+    # Loop through each item and get its ACL attributes
+    $aclInfo = foreach ($item in $items) {
+        # Get the full path of the item
+        $itemPath = $item.FullName
+
+        write-host $itemPath
+        
+        # Get the ACL attributes of the item
+        $acl = Get-Acl $itemPath
+
+        # Return an object with the path and ACL attributes
+        [PSCustomObject]@{
+            'Path' = $itemPath
+            'Owner' = $acl.Owner
+            'Access' = $acl.AccessToString
+        } 
+    }
+
+    # Export the ACL information to a CSV file
+    $aclInfo | Export-Csv $OutputFile -NoTypeInformation
+}
