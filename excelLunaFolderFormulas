@@ -1,0 +1,24 @@
+We added three more checks for backupexec, soservice and System. Copy and paste the new formula below in Action column for all tabs 
+
+
+=IF(AND(RIGHT(A2,4)="READ",LEFT(C2,4)="Read"), "No Action",
+  IF(AND(RIGHT(A2,4)="FULL",LEFT(C2,4)="Modi"), "No Action",
+  IF(AND(RIGHT(A2,6)="ADMINS",LEFT(C2,4)="Full"), "No Action",
+  IF(AND(RIGHT(A2,10)="backup exec",LEFT(C2,4)="Full"), "No Action",
+  IF(AND(RIGHT(A2,9)="soservice",LEFT(C2,4)="Modi"), "No Action",
+  IF(AND(RIGHT(A2,6)="System",LEFT(C2,4)="Full"), "No Action",
+  "Analyze"))))))
+
+
+The new formula is also nicely formatted, making adding new checks easier. Copy and paste an IF statement, modify the text, and add one more parenthesis at the end.
+
+Example:
+
+=IF(AND(RIGHT(A2,4)="READ",LEFT(C2,4)="Read"), "No Action",
+  IF(AND(RIGHT(A2,4)="FULL",LEFT(C2,4)="Modi"), "No Action",
+  IF(AND(RIGHT(A2,6)="ADMINS",LEFT(C2,4)="Full"), "No Action",
+  IF(AND(RIGHT(A2,10)="backup exec",LEFT(C2,4)="Full"), "No Action",
+  IF(AND(RIGHT(A2,9)="soservice",LEFT(C2,4)="Modi"), "No Action",
+  IF(AND(RIGHT(A2,6)="System",LEFT(C2,4)="Full"), "No Action",
+  IF(AND(RIGHT(A2,17)="sourceonesecurity",LEFT(C2,4)="Modi"), "No Action",
+  "Analyze")))))))
